@@ -1,0 +1,41 @@
+=============================================================================================================
+|																											|
+|				Here is an overview for each class and its respective operations							|
+|										by Dante Anzalone													|
+|___________________________________________________________________________________________________________|
+|																										   	|
+|											|    Chapter 1    |												|
+|																											|
+| MeanMedianModeSD Class | Contains methods for finding Mean, Median, Mode, Standard Deviation and Variance	|
+|___________________________________________________________________________________________________________|
+|																											|
+|											|    Chapter 2    |												|
+|																											|
+| UnionIntersectonComplement Class | Contains methods for Set Theory, such as Union, Intersection, 			|
+| and Compliment 																							|
+|																											|
+| CombinationPermutationFactorial Class | Contains methods for finding Factorial, Permutations, and 		|
+| Combinations																								|
+|																											|
+| ConditionalBayesDependence Class | Contains methods for finding and utilizing Conditional Probability,	| 
+| Bayes-Theorem, finding the dependence and independence, finding mutually exclusive sets, and finding		|
+| the intersection and union probabilities of either dependent or independent sets and mutually exclusive   |
+| or not mutually exclusive sets, respectively. 															|
+|___________________________________________________________________________________________________________|
+|																											|
+|											|    Chapter 3    |											 	|
+|																											|
+| Distributions Class | Contains methods for distributions, such as Geometric, Binomial, Hyper Geometric,   |
+| Negative Binomial, Possion, and Tchebysheff’s Theorem. Also accounts for their expected and variances		|
+| in respective methods. Does not include standard deviation as this is redundant and can be retrieved by	|
+| square rooting the result via variance methods.															|
+|___________________________________________________________________________________________________________|
+|																											|
+|											|      Tester     |												|
+|																											|
+| TestCBD				- Tests ConditionalBayesDependence Class											|
+| Test CPF				- Tests CombinationPermutationFactorial Class										|
+| TestDistributions		- Tests Distributions Class															|
+| TestMMMS				- Tests MeanMedianModeSD Class														|
+| Test UIC				- UnionIntersectonComplement Class													|
+=============================================================================================================
