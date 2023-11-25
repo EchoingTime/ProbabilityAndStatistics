@@ -1,0 +1,33 @@
+=============================================================================================================
+|																											|
+|				Here is an overview for each class and its respective operations (Project Two)			    |
+|										by Dante Anzalone													|
+|___________________________________________________________________________________________________________|
+|																										   	|
+|									|    PlottersSaltersSmoothers    |										|
+|																											|
+| personalPlotterSalterSmoother Package - - Contains Classes - | Plotter | Salter | Smoother				|
+|																											|
+| + Plotter Class - Uses y = ax^2 + bx + c, quadratic equation, a formula for a parabola, to produce a set  |
+| amount of y points in a determined range and using the quadratic formula, altered to solve for x with y 	|
+| to gather x points, writing both into a CSV file called personalPlotsXY.csv								|
+| Allows a user to collect the sample outputs and plot them in excel chart form        						|
+| 																											|
+| + Salter Class - Accepts the Plotter class file, personalPlotsXY.csv, and loops through every y value and |
+| either adds or subtracts a random number from it, determined by the user. The random number is provided  	|
+| via a range. Allows a user to have a significant number of data points, the y values, to be altered,		|
+| and saves it into a new file called personalSaltedXY.csv 													|
+|																											|
+| + Smoother Class - Accepts a salted file, personalSaltedXY.csv, to loop through each y value and gather	|
+| an average of the points around it, a range is determined by the user. The average will replace that		|
+| specific y coordinate, therefore smoothing the data. More detail in the smoothing class' comments! 		|
+| 																											|
+| personalPSSTesters Package - 	- Contains Testing Classes - | Plot | Salt | Smooth							|
+| Plot 							- Tests Plotter Class														|
+| Salt 							- Tests Salter Class 														|
+| Smooth 						- Tests Smoother Class														|
+|___________________________________________________________________________________________________________|
+|																											|
+|___________________________________________________________________________________________________________|
+|																											|
+=============================================================================================================
