@@ -1,7 +1,7 @@
 package stocks;
 
 import java.io.File;
-import apacheAndJFreeChartPSS.Smoother;
+
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 public class StockDataLoader 
 {
-	private Smoother smooth;
 	private String fileName;	
 	
 	private ArrayList <String> date;
@@ -25,7 +24,6 @@ public class StockDataLoader
 
 	public StockDataLoader (String fileName)
 	{
-		smooth = new Smoother ();
 		this.fileName = fileName;
 		
 		date = new ArrayList <String> ();
