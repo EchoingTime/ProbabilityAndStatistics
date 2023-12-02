@@ -52,7 +52,7 @@ public class Smoother
 		try 
 		{
 			reader = new BufferedReader (new FileReader("personalSaltedXY.csv"));
-			writer = new BufferedWriter (new FileWriter("personalSmoothedXY.csv"));
+			writer = new BufferedWriter (new FileWriter("personalSmoothedXY"));
 			aLine = reader.readLine(); // Gets the title (indicators, "x,y" of the file)
 			
 			writer.write(aLine);
