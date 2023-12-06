@@ -31,5 +31,24 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/jfreechart-1.0.19/lib/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/jfreechart-1.0.19/lib/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-legacy-4.0-beta1-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-legacy-4.0-beta1.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-legacy-core-4.0-beta1-javadoc.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-legacy-core-4.0-beta1-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-legacy-core-4.0-beta1.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-legacy-exception-4.0-beta1-javadoc.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-legacy-exception-4.0-beta1-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-legacy-exception-4.0-beta1.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-transform-4.0-beta1-javadoc.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-transform-4.0-beta1-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-transform-4.0-beta1.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-neuralnet-4.0-beta1-javadoc.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-neuralnet-4.0-beta1-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-neuralnet-4.0-beta1.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-core-4.0-beta1-javadoc.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-core-4.0-beta1-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/dante_anz/Downloads/commons-math-4.0-beta1/commons-math4-core-4.0-beta1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

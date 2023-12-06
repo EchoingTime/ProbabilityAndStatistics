@@ -13,6 +13,7 @@ public class Main
 		load.copyFileToArrayList();
 		load.toFile();
 		
+		load.setBalance(100000); // Sets my balance to $100,000 
 		
 	}
 }
