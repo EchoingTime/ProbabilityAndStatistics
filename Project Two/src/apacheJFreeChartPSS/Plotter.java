@@ -16,7 +16,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
+/**
+ * Plotter Class - Uses JFreeChart to plots x and y-coordinates via a given csv file supplied by the user
+ * @author Dante Anzalone
+ * @version 2023-09 (4.29.0)
+ * @referenced www.javatpoint.com/jfreechart-scatter-chart
+ */
 public class Plotter extends JFrame
 {
 	private static final long serialVersionUID = 6294689542092367723L; // Auto generated/required/referenced
@@ -26,6 +31,10 @@ public class Plotter extends JFrame
 	private ChartPanel panel; // Creates the ChartPanel
 	private ArrayList <Double> x, y; // ArrayList of x and y points
 	
+	/**
+	 * Plotter Constructor - Takes in parameters that determines titles, labels, and the folder containing the x and y-coordinates
+	 * Also initializes ArrayLists and calls private methods.
+	 */
 	public Plotter (String titleOfWindow, String titleOfGraph, String xySeriesTitle, String xAxis, String yAxis, String dataCSV)
 	{
 		super(titleOfWindow); // Title of the window sent to superclass, JFrame
@@ -44,6 +53,12 @@ public class Plotter extends JFrame
 		setContentPane(panel);
 	}
 	
+	/**
+	 * XYDataset Method - A private method that is responsible for adding x and y-coordinates to the XYSeries
+	 * data set.
+	 * @param xySeriesTitle - Part of the legend
+	 * @return dataPoint - All the plotted points
+	 */
 	private XYDataset createDataset (String xySeriesTitle)
 	{
 		XYSeries series;
@@ -64,7 +79,12 @@ public class Plotter extends JFrame
 	}
 	
 	// Referenced Initial Salter class
-	private void gatherCoordinates (String dataCSV)
+	/**
+	 * gatherCoordinates Method - Referenced initializes Salter class in personalPlotterSalterSmoother package.
+	 * Reads given file via parameter and moves x values and y values in respective ArrayLists
+	 * @param dataCSV - The file provided by the user
+	 */
+	public void gatherCoordinates (String dataCSV)
 	{
 		BufferedReader reader;
 		String aLine;
@@ -92,5 +112,23 @@ public class Plotter extends JFrame
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * getXCoord Method - Retrieves the x-coordinate ArrayList
+	 * @return x - ArrayList of x-coordinates
+	 */
+	public ArrayList <Double> getXCoord ()
+	{
+		return x;
+	}
+	
+	/**
+	 * getYCoord Method - Retrieves the y-coordinate ArrayList
+	 * @return y - ArrayList of y-coordinates
+	 */
+	public ArrayList <Double> getYCoord ()
+	{
+		return y;
 	}
 }
