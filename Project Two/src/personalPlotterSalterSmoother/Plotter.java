@@ -45,7 +45,7 @@ public class Plotter
 		Random rand;
 		double x, y, otherX, temp;
 	
-		formater = new DecimalFormat("#0.00");
+		formater = new DecimalFormat("#0.000000");
 		rand = new Random ();
 		
 		try 

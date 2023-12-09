@@ -17,6 +17,7 @@ public class TestAJPSS
 		ArrayList <Double> x, y;
 		Plotter plot;
 		Salter salt;
+		Smoother smooth;
 
 		x = new ArrayList <Double> ();
 		y = new ArrayList <Double> ();
@@ -52,5 +53,19 @@ public class TestAJPSS
 			salt.saltPlot(5, 25);
 		});
 		
+		x = salt.getXCoordSalt();
+		y = salt.getYCoordSalt();
+		
+		smooth = new Smoother ("JFreeChart: A Scatter Chart - Smoothed", 
+				"JFreeChart: Parabola - Smoothed", 
+				"Smoothed Parabola Points", 
+				"x-Coordinates", 
+				"y-Coordinates", x, y, 65);
+		
+		// Smoothing 
+		SwingUtilities.invokeLater(() -> 
+		{
+			smooth.smoothPlot();
+		});
 	}
 }

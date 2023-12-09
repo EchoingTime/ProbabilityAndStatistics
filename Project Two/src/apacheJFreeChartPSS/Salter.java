@@ -36,7 +36,7 @@ public class Salter
 		double alter;
 		
 		rand = new Random ();
-		formater = new DecimalFormat("#0.00"); // Reformatting after the altered y value
+		formater = new DecimalFormat("#0.00000"); // Reformatting after the altered y value
 		
 		try // Create BufferReader and read file, but if the file is not there, print stack trace
 		{
@@ -49,7 +49,8 @@ public class Salter
 			for (int i = 0; i < x.size(); i++)
 			{
 				alter = rand.nextDouble(changeHigh - changeLow) + changeLow;
-				writer.write(""+ x.get(i) + ", " + formater.format(y.get(i) + alter)); 
+				y.set(i, y.get(i)+ alter);
+				writer.write(""+ x.get(i) + ", " + formater.format(y.get(i))); 
 
 				writer.newLine();
 			}		
@@ -75,5 +76,23 @@ public class Salter
 		plot.setLocationRelativeTo(null);
 		plot.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		plot.setVisible(true);
+	}
+	
+	/**
+	 * getXCoordSalt Method - Retrieves the x-coordinates in class' ArrayList
+	 * @return x - ArrayList of coordinate values
+	 */
+	public ArrayList <Double> getXCoordSalt ()
+	{
+		return x;
+	}
+	
+	/**
+	 * getYCoordSalt Method - Retrieves the salted y-coordinates in class' ArrayList
+	 * @return y - ArrayList of coordinate values
+	 */
+	public ArrayList <Double> getYCoordSalt ()
+	{
+		return y;
 	}
 }
