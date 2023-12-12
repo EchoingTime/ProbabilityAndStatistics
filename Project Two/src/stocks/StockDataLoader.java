@@ -2,8 +2,11 @@ package stocks;
 
 import java.io.File;
 
+
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -38,9 +41,97 @@ public class StockDataLoader
 		shares = 0;
 	}
 	
-	public void smoothData ()
+	public void run (int balance) throws FileNotFoundException
 	{
+		copyFileToArrayList();
+		toFile();
+		setBalance(balance); 
+		relativeStrengthIndex();
+	}
+	
+	/**
+	 * relativeStrengthIndex Method - Calculates the RSI
+	 * @referenced https://www.macroption.com/rsi-calculation/
+	 */
+	public void relativeStrengthIndex ()
+	{
+		NumberFormat formater;
+		String f;
+		// Getting the closing prices of the last 15 days... In this case, the last 15 weeks
+		double [] arrayClose;
+		double [] upMove, downMove;
+		double chng;
+		double avgU, avgD;
+		double relativeStrength, relativeStrengthIndex;
 		
+		avgU = 0;
+		avgD = 0;
+		chng = 0;
+		formater = new DecimalFormat("#0.00");
+
+		arrayClose = new double [16];
+		upMove = new double [15];
+		downMove = new double [15];
+		
+		for (int i = 0; i < arrayClose.length; i++) // Gets the recent 15 close prices
+		{
+			arrayClose[i] = Double.parseDouble(close.get((close.size() - 1) - i));
+		}
+		
+		System.out.printf("Close (Top Most Recent), Up, Down%n");
+
+		// STEP 1: Calculating Up Moves and Down Moves
+		// Most recent is in index 0. Will get the increases and declines in the last 15 days
+		
+		for (int i = 0; i < arrayClose.length - 1; i++)
+		{
+			chng = arrayClose[i] - arrayClose[i+1];
+			
+			if (chng > 0)
+			{
+				upMove[i] = chng;
+			}
+			else // if (chng == 0 || chng < 0)
+			{
+				upMove[i] = 0;
+			}
+			
+			if (chng < 0)
+			{
+				downMove[i] = Math.abs(chng);
+			}
+			else // if (chng == 0 || chng > 0)
+			{
+				downMove[i] = 0;
+			}
+			
+			f = "" + formater.format(arrayClose[i]) + ", " + formater.format(upMove[i]) + ", " + formater.format(downMove[i]);
+			System.out.printf("%s%n", f);
+		}
+		
+		// Step 2: Averaging the Advances and Declines
+		// Using Simple Moving Average
+		// N = 15
+		
+		for (int i = 0; i < upMove.length; i++)
+		{
+			avgU += upMove[i];
+			avgD += downMove[i];
+		}
+		
+		avgU /= 15;
+		avgD /= 15;
+				
+		// Step 3: Calculating Relative Strength
+		relativeStrength = avgU/avgD;
+
+		// Step 4: Calculating the Relative Strength Index (RSI)
+		
+		relativeStrengthIndex = 100 - 100 / (1 + relativeStrength);
+		
+		f = "Average Up: " + formater.format(avgU) + "\nAverage Down: " + formater.format(avgD) + "\nRS: " + formater.format(relativeStrength) + "\nRSI: " + formater.format(relativeStrengthIndex);
+		System.out.printf("%n%s", f);
+
 	}
 	
 	/**
