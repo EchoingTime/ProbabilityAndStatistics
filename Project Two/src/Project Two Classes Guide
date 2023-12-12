@@ -26,6 +26,12 @@
 | Plot 							- Tests Plotter Class														|
 | Salt 							- Tests Salter Class 														|
 | Smooth 						- Tests Smoother Class														|
+|																											|
+| apacheJFreeChart Package - - Contains Classes - | Plotter | Salter | Smoother | TestAJPSS					|
+|																											|
+| + Classes basically follow suit of the personal plotter, salter, smoother, and tester classes. However,	|
+| the classes use JFreeChart and Apache to short cut some of the methods. By either using specialized mean	|
+| methods or creating graphs directly from the JFreeChart													|
 |___________________________________________________________________________________________________________|
 |																											|
 |___________________________________________________________________________________________________________|
