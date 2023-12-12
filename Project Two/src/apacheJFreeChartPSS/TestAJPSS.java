@@ -60,7 +60,7 @@ public class TestAJPSS
 				"JFreeChart: Parabola - Smoothed", 
 				"Smoothed Parabola Points", 
 				"x-Coordinates", 
-				"y-Coordinates", x, y, 65);
+				"y-Coordinates", x, y, 50);
 		
 		// Smoothing 
 		SwingUtilities.invokeLater(() -> 

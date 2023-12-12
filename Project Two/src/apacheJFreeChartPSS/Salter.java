@@ -10,12 +10,19 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.WindowConstants;
-
+/**
+ * Salter Class - Salts a graph using personal salter methods and then plots the arrays using JFreeChart to short cut the process
+ * @author Dante Anzalone
+ * @version 2023-09 (4.29.0)
+ */
 public class Salter
 {
 	private String titleOfWindow, titleOfGraph, xySeriesTitle, xAxis, yAxis;
 	private ArrayList <Double> x, y;
 
+	/**
+	 * Salter Constructor - Initializes the global variables
+	 */
 	public Salter (String titleOfWindow, String titleOfGraph, String xySeriesTitle, String xAxis, String yAxis, ArrayList <Double> x, ArrayList <Double> y) 
 	{
 		this.titleOfWindow = titleOfWindow;
@@ -27,6 +34,28 @@ public class Salter
 		this.y = y;
 	}
 	
+	/**
+	 * saltPlot method - Salts a graph using the parameters as the low and high bounds and then plots it via JFreeChart
+	 * @param changeLow - Lower bound
+	 * @param changeHigh - Upper bound
+	 */
+	public void saltPlot (double changeLow, double changeHigh)
+	{
+		Plotter plot;
+
+		saltIt (changeLow, changeHigh);
+		plot = new Plotter (titleOfWindow, titleOfGraph, xySeriesTitle, xAxis, yAxis, "apacheSaltedXY.csv");
+		plot.setSize(1000, 1000);
+		plot.setLocationRelativeTo(null);
+		plot.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		plot.setVisible(true);
+	}
+	
+	/**
+	 * saltIt Method - Responsible for salting the graph
+	 * @param changeLow - Lower bounds
+	 * @param changeHigh - Upper bounds
+	 */
 	private void saltIt (double changeLow, double changeHigh)
 	{
 		BufferedWriter writer;
@@ -64,18 +93,6 @@ public class Salter
 		{
 			e.printStackTrace();
 		}
-	}
-	
-	public void saltPlot (double changeLow, double changeHigh)
-	{
-		Plotter plot;
-
-		saltIt (changeLow, changeHigh);
-		plot = new Plotter (titleOfWindow, titleOfGraph, xySeriesTitle, xAxis, yAxis, "apacheSaltedXY.csv");
-		plot.setSize(1000, 1000);
-		plot.setLocationRelativeTo(null);
-		plot.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		plot.setVisible(true);
 	}
 	
 	/**

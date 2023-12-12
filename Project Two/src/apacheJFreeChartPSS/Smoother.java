@@ -1,8 +1,5 @@
 package apacheJFreeChartPSS;
 
-import org.apache.commons.math4.legacy.analysis.interpolation.LoessInterpolator;
-import org.apache.commons.math4.legacy.analysis.polynomials.PolynomialSplineFunction;
-
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -10,12 +7,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.WindowConstants;
+
+import org.apache.commons.math4.legacy.stat.StatUtils;
 /**
- * Smoother Class - Follows the same mistake as the previous smoother in the personal package
+ * Smoother Class - Smoothes a salted graph
  * @author Dante Anzalone
- * @version
+ * @version 2023-09 (4.29.0)
  * @referneced https://www.programcreek.com/java-api-examples/?class=org.apache.commons.math3.analysis.interpolation.LoessInterpolator&method=smooth
- * Referenced portions are commented out
+ * However, did not work as intended so I then referenced https://commons.apache.org/proper/commons-math/commons-math-docs/apidocs/org/apache/commons/math4/legacy/stat/StatUtils.html
  */
 public class Smoother
 {
@@ -23,6 +22,9 @@ public class Smoother
 	private ArrayList <Double> x, y;
 	private int windowValue;
 
+	/**
+	 * Smoother Constructor - Initializes the global variables
+	 */
 	public Smoother (String titleOfWindow, String titleOfGraph, String xySeriesTitle, String xAxis, String yAxis, ArrayList <Double> x, ArrayList <Double> y, int windowValue) 
 	{
 		this.titleOfWindow = titleOfWindow;
@@ -35,28 +37,35 @@ public class Smoother
 		this.windowValue = windowValue;
 	}
 	
-	// https://www.programcreek.com/java-api-examples/?class=org.apache.commons.math3.analysis.interpolation.LoessInterpolator&method=smooth
-	// Used link, fixed error by seeing it needed to be sorted (had check if sorted methods)
+	/**
+	 * smoothPlot Method - Responsible for running the smoothing methods and plotting the result
+	 */
+	public void smoothPlot ()
+	{
+		Plotter plot;
+		
+		smoothIt();
+		plot = new Plotter (titleOfWindow, titleOfGraph, xySeriesTitle, xAxis, yAxis, "apacheSmoothedXY.csv");
+		plot.setSize(1000, 1000);
+		plot.setLocationRelativeTo(null);
+		plot.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		plot.setVisible(true);
+	}
+	
+	/**
+	 * smoothIt Method - Responsible for smoothing the salted graph by calling on apache's mean method
+	 */
 	private void smoothIt ()
 	{
-		/*
-		LoessInterpolator interpolator; // Referenced 
-		PolynomialSplineFunction spline;
-		*/
 		BufferedWriter writer;
-		double [] xA, yA; //, smoother; 
+		double [] xA, yA;
+		double average;
 		String aLine;
-		
-		/*
-		double bandwidth;
-		
-		bandwidth = .25;
-		interpolator = new LoessInterpolator (bandwidth, 2);
-		*/
+		int begin, length;
 		
 		xA = new double [x.size()];
-		// smoother = new double [x.size()];
 		yA = new double [y.size()];
+		
 				
 		// Using my bubble sort from other class
 		y = sort(y);
@@ -67,12 +76,6 @@ public class Smoother
 			yA[i] = y.get(i);
 		}
 		
-		/*
-		interpolator.smooth(xA, yA);
-		spline = interpolator.interpolate(xA, yA);
-		smoother = spline.getKnots();
-		*/
-		
 		try // Create BufferReader and read file, but if the file is not there, print stack trace
 		{
 			writer = new BufferedWriter (new FileWriter ("apacheSmoothedXY.csv"));
@@ -81,19 +84,14 @@ public class Smoother
 			writer.write(aLine); // Writes the title of the file into a new salted file
 			writer.newLine();
 			
-			/*
-			for (int i = 0; i < x.size(); i++)
-			{
-				writer.write(""+ xA[i] + ", " + smoother[i]); 
-
-				writer.newLine();
-			}		
-			*/
-			
 			for (int i = 0; i < y.size(); i++) // yData is all filled out, so smooth each and write it to new smoothed file 
 			{				
-				yA[i] = average(windowValue, i, yA);
+				begin = Math.max(0, i - windowValue + 1); // Figured out via error: Exception in thread "AWT-EventQueue-0" org.apache.commons.math4.legacy.exception.NumberIsTooLargeException: subarray ends after array end
+				length = Math.min(y.size() - 1, i);
 				
+				average = StatUtils.mean(yA, begin, length - begin + 1);
+				yA[i] = average;
+
 				writer.write(xA[i] + ", " + yA[i]);
 				writer.newLine();
 			}
@@ -109,77 +107,13 @@ public class Smoother
 			e.printStackTrace();
 		}
 	}
-	
-	// Used from personal smoother
-	private double average (int windowValue, int index, double [] array)
-	{
-		// Should have an array list of y coordinates
-		int low, high; 
-		double average, toDivideBy;
-		boolean runLow, runHigh;
-		
-		toDivideBy = 0;
-		average = 0;
-		runLow = true;
-		runHigh = true;
-		low = index - windowValue;
-		high = index + windowValue;
-			
-		// Check if it is within the bounds
-		while (runLow == true || runHigh == true)
-		{
-			if (low < 0)
-			{
-				low++;
-			}
-			else
-			{
-				runLow = false; // Within bounds
-			}
 
-			if (high >= array.length)
-			{
-				high--;
-			}
-			else
-			{
-				runHigh = false;
-			}
-		}
-		
-		// Should have legal index bounds to add and find averages of
-		while (low != index)
-		{
-			average += (array[low]);
-			toDivideBy++;
-			low++;
-		}
-
-		while (high != index)
-		{
-			average += (array[high]);
-			toDivideBy++;
-			high--;
-		}
-		average = average / toDivideBy + 1;
-
-		return average;
-	}
-	
-	public void smoothPlot ()
-	{
-		Plotter plot;
-		
-		smoothIt();
-		plot = new Plotter (titleOfWindow, titleOfGraph, xySeriesTitle, xAxis, yAxis, "apacheSmoothedXY.csv");
-		plot.setSize(1000, 1000);
-		plot.setLocationRelativeTo(null);
-		plot.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		plot.setVisible(true);
-	}
-	
-	// Sorting x coordinates - Added y coordinates in to swap alongside the x coordinates
-	// Used sorter from previous class
+	/**
+	 * sort Method -  Sorting x coordinates - Added y coordinates in to swap alongside the x coordinates
+	 * @param list - ArrayList of elements
+	 * @return list - Sorted ArrayList of Elements
+	 * @referenced Used from another class
+	 */
 	public ArrayList<Double> sort (ArrayList <Double> list)
 	{
 		double current, temp, swaps;
@@ -211,7 +145,6 @@ public class Smoother
 					swaps++;
 				}
 			}
-			
 			if (swaps > 0) // Tells the program when to end if swaps == 0, meaning no swaps were done!
 			{
 				swaps = 0;
@@ -221,7 +154,6 @@ public class Smoother
 				run = false;
 			}
 		}
-		
 		return list;
 	}
 }
