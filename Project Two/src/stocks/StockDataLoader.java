@@ -50,38 +50,47 @@ public class StockDataLoader
 	}
 	
 	/**
-	 * relativeStrengthIndex Method - Calculates the RSI
+	 * relativeStrengthIndex Method - Calculates the RSI and writes the up movement, down movement, average up, average down,
+	 * relative strength, and relative strength index to the stocksCloseRSI.csv file.
+	 * @throws FileNotFoundException 
 	 * @referenced https://www.macroption.com/rsi-calculation/
 	 */
-	public void relativeStrengthIndex ()
+	public void relativeStrengthIndex () throws FileNotFoundException
 	{
+		PrintWriter toFile;	// Declaring the PrintWriter object toFile
+		toFile = new PrintWriter("stocksCloseRSI.csv");
 		NumberFormat formater;
 		String f;
 		// Getting the closing prices of the last 15 days... In this case, the last 15 weeks
 		double [] arrayClose;
-		double [] upMove, downMove;
+		String [] dateArray;
+		double [] upMove, downMove, avgU, avgD, rs, rsi;
 		double chng;
-		double avgU, avgD;
-		double relativeStrength, relativeStrengthIndex;
+		int n, stop;
+		n = 15;
 		
-		avgU = 0;
-		avgD = 0;
 		chng = 0;
 		formater = new DecimalFormat("#0.00");
 
-		arrayClose = new double [16];
-		upMove = new double [15];
-		downMove = new double [15];
+		arrayClose = new double [close.size()];
+		dateArray = new String [close.size()];
+		upMove = new double [close.size()];
+		downMove = new double [close.size()];
+		avgU =  new double [close.size()];
+		avgD = new double [close.size()];
+		rs = new double [close.size()];
+		rsi = new double [close.size()];
 		
-		for (int i = 0; i < arrayClose.length; i++) // Gets the recent 15 close prices
+		for (int i = 0; i < arrayClose.length; i++) // Gets close prices, starting from most recent
 		{
 			arrayClose[i] = Double.parseDouble(close.get((close.size() - 1) - i));
+			dateArray[i] = (date.get((date.size() - 1) - i));
 		}
 		
-		System.out.printf("Close (Top Most Recent), Up, Down%n");
+		toFile.printf("Data, Close, Up, Down, Average Up, Average Down, RS, RSI%n");
 
 		// STEP 1: Calculating Up Moves and Down Moves
-		// Most recent is in index 0. Will get the increases and declines in the last 15 days
+		// Most recent is in index 0. Will get the increases and declines
 		
 		for (int i = 0; i < arrayClose.length - 1; i++)
 		{
@@ -104,34 +113,62 @@ public class StockDataLoader
 			{
 				downMove[i] = 0;
 			}
-			
-			f = "" + formater.format(arrayClose[i]) + ", " + formater.format(upMove[i]) + ", " + formater.format(downMove[i]);
-			System.out.printf("%s%n", f);
 		}
 		
 		// Step 2: Averaging the Advances and Declines
-		// Using Simple Moving Average
-		// N = 15
+		// Using Simple Moving Method
+		// N = 14
+		
+		avgU[0] = upMove[0];
+		avgD[0] = downMove[0];
+		
+		for (int i = 1; i < upMove.length; i++)
+		{
+			avgU[i] = upMove[i];
+			avgD[i] = downMove[i];
+			stop = 0;
+			
+			for (int j = i + 1; j < upMove.length; j++)
+			{
+				if (stop == n)
+				{
+					break;
+				}
+				else
+				{
+					stop++;
+					avgU[i] += upMove[j];
+					avgD[i] += downMove[j];
+				}
+			}
+			
+			avgU[i] = avgU[i] / n; // Moved out of if (stop == n)
+			avgD[i] = avgD[i] / n;
+		}
+				
+		// Step 3: Calculating Relative Strength 
+		// and
+		// Step 4: Calculating the Relative Strength Index (RSI)
 		
 		for (int i = 0; i < upMove.length; i++)
 		{
-			avgU += upMove[i];
-			avgD += downMove[i];
+			if (avgD[i] == 0)
+			{
+				rsi[i] = 100;
+			}
+			else
+			{
+				rs[i] = avgU[i]/avgD[i];
+				rsi[i] = 100 - 100 / (1 + rs[i]);
+			}
 		}
-		
-		avgU /= 15;
-		avgD /= 15;
 				
-		// Step 3: Calculating Relative Strength
-		relativeStrength = avgU/avgD;
-
-		// Step 4: Calculating the Relative Strength Index (RSI)
-		
-		relativeStrengthIndex = 100 - 100 / (1 + relativeStrength);
-		
-		f = "Average Up: " + formater.format(avgU) + "\nAverage Down: " + formater.format(avgD) + "\nRS: " + formater.format(relativeStrength) + "\nRSI: " + formater.format(relativeStrengthIndex);
-		System.out.printf("%n%s", f);
-
+		for (int i = 0; i < arrayClose.length; i++)
+		{
+			f = "" + dateArray[i] + ", " + formater.format(arrayClose[i]) + ", " + formater.format(upMove[i]) + ", " + formater.format(downMove[i]) + ", " + formater.format(avgU[i]) + ", " + formater.format(avgD[i]) + ", " + formater.format(rs[i]) + ", " + formater.format(rsi[i]);
+			toFile.printf("%s%n", f);
+		}
+		toFile.close();
 	}
 	
 	/**
