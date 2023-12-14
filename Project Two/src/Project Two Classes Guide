@@ -34,6 +34,12 @@
 | methods or creating graphs directly from the JFreeChart													|
 |___________________________________________________________________________________________________________|
 |																											|
-|___________________________________________________________________________________________________________|
+|									|		finalStatsLibrary		|										|
 |																											|
+| finalStatsLibrary Package - - Contains Classes - | UniformDistribution | TestStats 						|
+|																											|
+| + UniformDistribiton Class - Utilizes the Uniform Distribution Probability, Expected, and Standard 		|
+| Deviation formulas and creates their respective methods.													|
+|																											|
+| + TestStats Class - Tests the UniformDistribution Class													|
 =============================================================================================================
