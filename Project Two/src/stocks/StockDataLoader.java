@@ -22,9 +22,15 @@ public class StockDataLoader
 	private ArrayList <String> adjClose;
 	private ArrayList <String> volume;
 	
+	private ArrayList <String> theRsi; // Relative Strength Index
+	private ArrayList <String> ma; // Smoothed RSI
+	
 	private double balance;
 	private int shares;
 
+	/**
+	 * StockDataLoader Constructor - Initializes variables
+	 */
 	public StockDataLoader (String fileName)
 	{
 		this.fileName = fileName;
@@ -36,17 +42,39 @@ public class StockDataLoader
 		close = new ArrayList <String> ();
 		adjClose = new ArrayList <String> ();
 		volume = new ArrayList <String> ();
+		
+		theRsi = new ArrayList <String> ();
+		ma = new ArrayList <String> ();
 
-		balance = 10000;
+		balance = 0;
 		shares = 0;
 	}
 	
+	/**
+	 * run Method - Responsible for running the Program
+	 * @param balance - Initializes balance
+	 * @throws FileNotFoundException - File not found
+	 */
 	public void run (int balance) throws FileNotFoundException
 	{
-		copyFileToArrayList();
+		copyFileToArrayList(false);
 		toFile();
 		setBalance(balance); 
 		relativeStrengthIndex();
+		tradeEvaulator();
+	}
+	
+	public int tradeEvaulator () throws FileNotFoundException
+	{
+		fileName = "StockGraphRSI.csv";
+		copyFileToArrayList(true);
+		
+		for (int i = 0; i < theRsi.size(); i++)
+		{
+			System.out.printf("%s, %s, %s%n", date.get(i), theRsi.get(i), ma.get(i));
+		}
+		
+		return 1;		
 	}
 	
 	/**
@@ -211,11 +239,12 @@ public class StockDataLoader
 	 * copyFileToArrayList Method - Copies a CSV file by using File and Scanner classes to read the file
 	 * and save it into several ArrayLists of strings.
 	 * @throws FileNotFoundException
+	 * @param rsi - True if the file contains the RSI and smooth RSI, false if not
 	 * @referenced https://stackoverflow.com/questions/33839008/storing-csv-file-contents-into-multiple-arrays
 	 * Had to figure out a better way that doing substrings to get the data from the file, as it became difficult after
 	 * data and open prices. This new way is definitely more efficient and straight forward.
 	 */
-	public void copyFileToArrayList () throws FileNotFoundException
+	public void copyFileToArrayList (boolean rsi) throws FileNotFoundException
 	{
 		File input;
 		Scanner in;
@@ -225,19 +254,36 @@ public class StockDataLoader
 		in = new Scanner(input);
 		
 		in.nextLine(); // Skips the initial title of stock file
-		
-		while (in.hasNext()) 
+		if (rsi == false)
 		{
-			dataLine = in.nextLine().split(",");
-			
-			date.add(dataLine[0]);
-			open.add(dataLine[1]);
-			high.add(dataLine[2]);
-			low.add(dataLine[3]);
-			close.add(dataLine[4]);
-			adjClose.add(dataLine[5]);
-			volume.add(dataLine[6]);
+			while (in.hasNext()) 
+			{
+				dataLine = in.nextLine().split(",");
+				
+				date.add(dataLine[0]);
+				open.add(dataLine[1]);
+				high.add(dataLine[2]);
+				low.add(dataLine[3]);
+				close.add(dataLine[4]);
+				adjClose.add(dataLine[5]);
+				volume.add(dataLine[6]);
+			}
 		}
+		else
+		{
+			date.clear();
+			close.clear();
+			while (in.hasNext())
+			{
+				dataLine = in.nextLine().split(",");
+				
+				date.add(dataLine[0]);
+				close.add(dataLine[1]);
+				theRsi.add(dataLine[7]);
+				ma.add(dataLine[8]);
+			}
+		}
+		
 		in.close();
 	}
 	
