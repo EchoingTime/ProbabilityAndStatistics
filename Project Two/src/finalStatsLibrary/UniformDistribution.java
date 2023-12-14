@@ -2,7 +2,12 @@ package finalStatsLibrary;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-
+/**
+ * UniformDistribution Class - Utilizes the Uniform Distribution Probability, Expected, and Standard Deviation formulas and creates
+ * their respective methods.
+ * @author Dante Anzalone
+ * @version 2023-09 (4.29.0)
+ */
 public class UniformDistribution 
 {
 	private NumberFormat formater;;

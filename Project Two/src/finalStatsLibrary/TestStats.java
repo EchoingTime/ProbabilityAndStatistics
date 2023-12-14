@@ -1,6 +1,10 @@
 package finalStatsLibrary;
-
-public class testStatsLibrary 
+/**
+ * TestStats Class - Tests the UniformDistribution.java and DiscreteMultivariate.java classes
+ * @author Dante Anzalone
+ * @version 2023-09 (4.29.0)
+ */
+public class TestStats 
 {
 	public static void main (String [] args)
 	{
