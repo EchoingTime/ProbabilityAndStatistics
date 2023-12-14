@@ -57,14 +57,15 @@ public class StockDataLoader
 	 */
 	public void relativeStrengthIndex () throws FileNotFoundException
 	{
-		PrintWriter toFile;	// Declaring the PrintWriter object toFile
+		PrintWriter toFile, toRSI;	// Declaring the PrintWriter object toFile
 		toFile = new PrintWriter("stocksCloseRSI.csv");
+		toRSI = new PrintWriter("rsi.txt"); // Will be used in MatLab to smooth
 		NumberFormat formater;
 		String f;
 		// Getting the closing prices of the last 15 days... In this case, the last 15 weeks
 		double [] arrayClose;
 		String [] dateArray;
-		double [] upMove, downMove, avgU, avgD, rs, rsi, smoothRsi;
+		double [] upMove, downMove, avgU, avgD, rs, rsi;
 		double chng;
 		int n, stop;
 		n = 15;
@@ -81,7 +82,6 @@ public class StockDataLoader
 		
 		rs = new double [close.size()];
 		rsi = new double [close.size()];
-		smoothRsi = new double [close.size()];
 		
 		for (int i = 0; i < arrayClose.length; i++) // Gets close prices, starting from most recent
 		{
@@ -89,7 +89,7 @@ public class StockDataLoader
 			dateArray[i] = (date.get((date.size() - 1) - i));
 		}
 		
-		toFile.printf("Data, Close, Up, Down, Average Up, Average Down, RS, RSI%n");
+		toFile.printf("Date, Close, Up, Down, Average Up, Average Down, RS, RSI, Smooth RSI%n");
 
 		// STEP 1: Calculating Up Moves and Down Moves
 		// Most recent is in index 0. Will get the increases and declines
@@ -147,20 +147,6 @@ public class StockDataLoader
 			
 			avgU[i] = avgU[i] / n; // Moved out of if (stop == n)
 			avgD[i] = avgD[i] / n;
-			
-			stop = 0;
-			
-			for (int k = 1; k < upMove.length; k++)
-			{
-				if (stop == n)
-				{
-					break;
-				}
-				else
-				{
-					stop++;
-				}
-			}
 		}
 				
 		// Step 3: Calculating Relative Strength 
@@ -184,8 +170,12 @@ public class StockDataLoader
 		{
 			f = "" + dateArray[i] + ", " + formater.format(arrayClose[i]) + ", " + formater.format(upMove[i]) + ", " + formater.format(downMove[i]) + ", " + formater.format(avgU[i]) + ", " + formater.format(avgD[i]) + ", " + formater.format(rs[i]) + ", " + formater.format(rsi[i]);
 			toFile.printf("%s%n", f);
+			
+			f= "" + formater.format(rsi[i]);
+			toRSI.printf("%s ", f);
 		}
 		toFile.close();
+		toRSI.close();
 	}
 	
 	/**
