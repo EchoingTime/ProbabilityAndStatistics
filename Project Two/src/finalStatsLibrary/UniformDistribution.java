@@ -10,7 +10,7 @@ import java.text.NumberFormat;
  */
 public class UniformDistribution 
 {
-	private NumberFormat formater;;
+	private NumberFormat formater;
 	
 	/**
 	 * UniformDistribution Constructor - Initializes the formatting 
