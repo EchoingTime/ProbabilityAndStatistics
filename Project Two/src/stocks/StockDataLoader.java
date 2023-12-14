@@ -64,7 +64,7 @@ public class StockDataLoader
 		// Getting the closing prices of the last 15 days... In this case, the last 15 weeks
 		double [] arrayClose;
 		String [] dateArray;
-		double [] upMove, downMove, avgU, avgD, rs, rsi;
+		double [] upMove, downMove, avgU, avgD, rs, rsi, smoothRsi;
 		double chng;
 		int n, stop;
 		n = 15;
@@ -78,8 +78,10 @@ public class StockDataLoader
 		downMove = new double [close.size()];
 		avgU =  new double [close.size()];
 		avgD = new double [close.size()];
+		
 		rs = new double [close.size()];
 		rsi = new double [close.size()];
+		smoothRsi = new double [close.size()];
 		
 		for (int i = 0; i < arrayClose.length; i++) // Gets close prices, starting from most recent
 		{
@@ -121,11 +123,12 @@ public class StockDataLoader
 		
 		avgU[0] = upMove[0];
 		avgD[0] = downMove[0];
-		
+
 		for (int i = 1; i < upMove.length; i++)
 		{
 			avgU[i] = upMove[i];
 			avgD[i] = downMove[i];
+			
 			stop = 0;
 			
 			for (int j = i + 1; j < upMove.length; j++)
@@ -144,6 +147,20 @@ public class StockDataLoader
 			
 			avgU[i] = avgU[i] / n; // Moved out of if (stop == n)
 			avgD[i] = avgD[i] / n;
+			
+			stop = 0;
+			
+			for (int k = 1; k < upMove.length; k++)
+			{
+				if (stop == n)
+				{
+					break;
+				}
+				else
+				{
+					stop++;
+				}
+			}
 		}
 				
 		// Step 3: Calculating Relative Strength 
@@ -159,7 +176,7 @@ public class StockDataLoader
 			else
 			{
 				rs[i] = avgU[i]/avgD[i];
-				rsi[i] = 100 - 100 / (1 + rs[i]);
+				rsi[i] = 100 - 100 / (1 + rs[i]);	
 			}
 		}
 				
