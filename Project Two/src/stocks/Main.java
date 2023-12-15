@@ -7,7 +7,7 @@ public class Main
 	public static void main (String [] args) throws FileNotFoundException
 	{
 		StockDataLoader load;
-		load = new StockDataLoader("AMZN.csv");
+		load = new StockDataLoader("AMZNDaily.csv");
 		load.run(100000);			
 	}
 }

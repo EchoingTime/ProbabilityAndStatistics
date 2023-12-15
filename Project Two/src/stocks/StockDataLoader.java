@@ -9,9 +9,18 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+/**
+ * StockDataLoader Class - Represents a Stock Bot that will use various methods such as obtaining data from
+ * CSV files via loading into ArrayLists, calculating RSI, and determining whether to buy or sell stock shares.
+ * @author Dante Anzalone
+ * @version 2023-09 (4.29.0)
+ * @referenced https://www.macroption.com/rsi-calculation/
+ * @referenced https://stackoverflow.com/questions/33839008/storing-csv-file-contents-into-multiple-arrays
+ */
 public class StockDataLoader 
 {
+	private NumberFormat formater;
+
 	private String fileName;	
 	
 	private ArrayList <String> date;
@@ -25,9 +34,12 @@ public class StockDataLoader
 	private ArrayList <String> theRsi; // Relative Strength Index
 	private ArrayList <String> ma; // Smoothed RSI
 	
+	private ArrayList <Double> networth;
+	
+	private double stock;
+	
 	private double balance;
-	private int shares;
-
+	
 	/**
 	 * StockDataLoader Constructor - Initializes variables
 	 */
@@ -45,9 +57,13 @@ public class StockDataLoader
 		
 		theRsi = new ArrayList <String> ();
 		ma = new ArrayList <String> ();
+		
+		networth = new ArrayList <Double> ();
+		
+		formater = new DecimalFormat("#0.00");
 
+		stock = 0;
 		balance = 0;
-		shares = 0;
 	}
 	
 	/**
@@ -57,24 +73,96 @@ public class StockDataLoader
 	 */
 	public void run (int balance) throws FileNotFoundException
 	{
+		PrintWriter toFile;
+		int choice;
+		double changeUp;
+		double changeDown;
+		changeUp = 0;
+		changeDown = 0;
+		choice = 0;
 		copyFileToArrayList(false);
 		toFile();
 		setBalance(balance); 
 		relativeStrengthIndex();
-		tradeEvaulator();
+		
+		fileName = "StockGraphRSIDaily.csv";
+		copyFileToArrayList(true);
+		fileName = "BotProcess.txt";
+		toFile = new PrintWriter(fileName);
+		// Will go until days = the most recent date (index 0)
+		toFile.printf("Stock Bot's Action Per Date%n");
+		for (int i = date.size() - 1; i >= 0; i--) // From oldest to most recent order
+		{
+			choice = tradeEvaulator(i);
+			
+			if (choice == 1) // Buy stocks
+			{
+				changeUp = (this.balance * .33) / Double.parseDouble(close.get(i)); // Stock increase
+				changeDown = (this.balance * .33); // Taking out from balance
+				
+				stock += changeUp; // Number of stock
+				this.balance -= changeDown;
+				toFile.printf("(B on %s) Change: %.2f, Stock: %.2f, Balance: %.2f%n", date.get(i), changeUp, stock, this.balance);
+				networth.add(this.balance + (stock * Double.parseDouble(close.get(i))));
+			}
+			else if (choice == -1) // Sell stocks
+			{
+				changeDown = (stock * .22);
+				changeUp = (stock * .22) * Double.parseDouble(close.get(i));
+				
+				stock -= changeDown;
+				this.balance += changeUp;
+				toFile.printf("(S on %s) Change: %.2f, Stock: %.2f, Balance: %.2f%n", date.get(i), changeDown, stock, this.balance);
+				networth.add(this.balance + (stock * Double.parseDouble(close.get(i))));
+			}
+			else
+			{
+				networth.add(this.balance + (stock * Double.parseDouble(close.get(i))));
+				toFile.printf("(N on %s) Stock Bot Did Nothing%n", date.get(i));
+			}
+		}
+		toFile.close();
+		// Net Worth File
+		
+		fileName = "networth.csv";
+		toFile = new PrintWriter(fileName);
+		toFile.printf("Date, Net Worth%n");
+		
+		for (int i = 0; i < networth.size(); i++)
+		{
+			toFile.printf("%s, %.2f%n", date.get(((networth.size() - 1) - i)), networth.get(i));
+		}
+		toFile.close();
 	}
 	
-	public int tradeEvaulator () throws FileNotFoundException
-	{
-		fileName = "StockGraphRSI.csv";
-		copyFileToArrayList(true);
-		
-		for (int i = 0; i < theRsi.size(); i++)
+	/**
+	 * tradeEvaulator Method - Determines when to buy shares, sell shares, or do nothing. Utilizes
+	 * moving average and the relative strength index to make its calculations
+	 * @param index - The index of the specific date
+	 * @return 0, if doing nothing, 1 if buying stocks, and -1 if selling stocks
+	 * @throws FileNotFoundException
+	 */
+	public int tradeEvaulator (int index) throws FileNotFoundException
+	{	
+		if (balance > 0)
 		{
-			System.out.printf("%s, %s, %s%n", date.get(i), theRsi.get(i), ma.get(i));
+			if (Double.parseDouble(ma.get(index)) < Double.parseDouble(theRsi.get(index)))
+			{
+				return 1; // Down, we buy! (33% of balance)
+			}
+			else if (Double.parseDouble(ma.get(index)) > Double.parseDouble(theRsi.get(index)))
+			{
+				if (stock > 0)
+				{
+					return -1; // Up, we sell!
+				}
+			}
+			else
+			{
+				return 0;
+			}
 		}
-		
-		return 1;		
+		return 0; // Out of balance
 	}
 	
 	/**
@@ -88,7 +176,6 @@ public class StockDataLoader
 		PrintWriter toFile, toRSI;	// Declaring the PrintWriter object toFile
 		toFile = new PrintWriter("stocksCloseRSI.csv");
 		toRSI = new PrintWriter("rsi.txt"); // Will be used in MatLab to smooth
-		NumberFormat formater;
 		String f;
 		// Getting the closing prices of the last 15 days... In this case, the last 15 weeks
 		double [] arrayClose;
@@ -99,7 +186,6 @@ public class StockDataLoader
 		n = 15;
 		
 		chng = 0;
-		formater = new DecimalFormat("#0.00");
 
 		arrayClose = new double [close.size()];
 		dateArray = new String [close.size()];
@@ -287,23 +373,12 @@ public class StockDataLoader
 		in.close();
 	}
 	
-	public double getBalance ()
-	{
-		return balance;
-	}
-	
-	public double getShares ()
-	{
-		return shares;
-	}
-	
+	/**
+	 * setBalance Method - Sets the new balance that the stock bot can spend
+	 * @param newBalance - Bot's balance
+	 */
 	public void setBalance (double newBalance)
 	{
 		balance = newBalance;
-	}
-	
-	public void setShares (int shares)
-	{
-		this.shares = shares;
 	}
 }
