@@ -4,7 +4,7 @@
 |										by Dante Anzalone													|
 |___________________________________________________________________________________________________________|
 |																										   	|
-|									|    PlottersSaltersSmoothers    |										|
+|									|    Plotters, Salters, and Smoothers    |								|
 |																											|
 | personalPlotterSalterSmoother Package - - Contains Classes - | Plotter | Salter | Smoother				|
 |																											|
@@ -34,7 +34,7 @@
 | methods or creating graphs directly from the JFreeChart													|
 |___________________________________________________________________________________________________________|
 |																											|
-|									|		finalStatsLibrary		|										|
+|									|		Final Statistics Library		|								|
 |																											|
 | finalStatsLibrary Package - - Contains Classes - | UniformDistribution | TestStats 						|
 |																											|
@@ -42,4 +42,15 @@
 | Deviation formulas and creates their respective methods.													|
 |																											|
 | + TestStats Class - Tests the UniformDistribution Class													|
+|___________________________________________________________________________________________________________|
+|																											|
+|									|		Stock Program		|											|
+|																											|
+| stocks Package - - Contains Classes - | StockDataLoader | Main |											|
+|																											|
+| + StockDataLoader Class - Represents a Stock Bot that will use various methods such as obtaining data		| 
+| from CSV files via loading into ArrayLists, calculating RSI, and determining whether to buy or sell stock	| 
+| shares.																									|
+|																											|
+| + Main Class - Runs the program and passes through the initial balance									|
 =============================================================================================================
